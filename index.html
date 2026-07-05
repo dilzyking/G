@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PITCHSIDE — World Cup 2026 Match Hub</title>
+<meta name="description" content="Live scores, schedule, groups and highlights for the 2026 tournament." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="./" class="brand">
+      <span class="brand-mark">●</span>
+      <span class="brand-text">PITCH<strong>SIDE</strong></span>
+    </a>
+    <nav class="main-nav">
+      <a href="#live" class="nav-link">Live</a>
+      <a href="#schedule" class="nav-link">Schedule</a>
+      <a href="#groups" class="nav-link">Groups</a>
+      <a href="#highlights" class="nav-link">Highlights</a>
+    </nav>
+    <div class="header-actions">
+      <span class="tz-note">Times shown in your local timezone</span>
+    </div>
+  </div>
+  <div id="live-ticker" class="live-ticker" hidden>
+    <div class="ticker-label"><span class="pulse-dot"></span> LIVE</div>
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Kickoff — June 11, 2026 · USA · Mexico · Canada</p>
+      <h1 class="hero-title">One tournament.<br>Every match, pitchside.</h1>
+      <p class="hero-sub">Follow live scores, the full match schedule and group standings across all 16 host stadiums — streamed as it happens.</p>
+      <div class="hero-actions">
+        <a href="#live" class="btn btn-primary">Watch live now</a>
+        <a href="#schedule" class="btn btn-ghost">See full schedule</a>
+      </div>
+    </div>
+    <div class="hero-scoreboard" aria-hidden="true">
+      <div class="scoreboard-row"><span>GRP A</span><span class="scoreboard-score">--</span></div>
+      <div class="scoreboard-row"><span>GRP B</span><span class="scoreboard-score">--</span></div>
+      <div class="scoreboard-row"><span>GRP C</span><span class="scoreboard-score">--</span></div>
+    </div>
+  </section>
+
+  <section id="live" class="section">
+    <div class="section-inner">
+      <div class="section-head">
+        <h2>Live now</h2>
+        <span class="section-note" id="live-count"></span>
+      </div>
+      <div id="live-grid" class="card-grid"></div>
+      <p id="live-empty" class="empty-state" hidden>Nothing's kicking off this exact minute — check the schedule below.</p>
+    </div>
+  </section>
+
+  <section id="schedule" class="section section-alt">
+    <div class="section-inner">
+      <div class="section-head">
+        <h2>Match schedule</h2>
+        <div class="filter-bar">
+          <select id="filter-group" aria-label="Filter by group">
+            <option value="">All groups</option>
+          </select>
+          <select id="filter-status" aria-label="Filter by status">
+            <option value="">All matches</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="live">Live</option>
+            <option value="finished">Finished</option>
+          </select>
+        </div>
+      </div>
+      <div id="schedule-grid" class="card-grid"></div>
+      <div class="load-more-wrap">
+        <button id="load-more-btn" class="btn btn-outline">Load more matches</button>
+        <p id="schedule-status" class="section-note"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="groups" class="section">
+    <div class="section-inner">
+      <div class="section-head">
+        <h2>Groups</h2>
+        <span class="section-note">Tap a group to load its table</span>
+      </div>
+      <div id="group-tabs" class="group-tabs"></div>
+      <div id="group-table-wrap" class="group-table-wrap">
+        <p class="empty-state">Pick a group above to load its standings.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="highlights" class="section section-alt">
+    <div class="section-inner">
+      <div class="section-head">
+        <h2>Highlights</h2>
+        <span class="section-note" id="highlights-note">Loads when you scroll here</span>
+      </div>
+      <div id="highlights-grid" class="highlight-grid"></div>
+      <div class="load-more-wrap">
+        <button id="highlights-more-btn" class="btn btn-outline" hidden>Load more highlights</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>PITCHSIDE — a demo match hub. Not affiliated with FIFA or any broadcaster.</span>
+    <span>Data refreshes lazily, section by section, to keep things fast.</span>
+  </div>
+</footer>
+
+<template id="match-card-template">
+  <article class="match-card">
+    <div class="match-meta">
+      <span class="match-group"></span>
+      <span class="match-venue"></span>
+    </div>
+    <div class="match-teams">
+      <div class="team home">
+        <span class="flag"></span>
+        <span class="team-name"></span>
+      </div>
+      <div class="match-score">
+        <span class="score-value"></span>
+      </div>
+      <div class="team away">
+        <span class="flag"></span>
+        <span class="team-name"></span>
+      </div>
+    </div>
+    <div class="match-footer">
+      <span class="match-status"></span>
+      <span class="match-time"></span>
+    </div>
+  </article>
+</template>
+
+<template id="highlight-card-template">
+  <article class="highlight-card">
+    <div class="highlight-thumb">
+      <span class="play-icon">▶</span>
+      <span class="highlight-duration"></span>
+    </div>
+    <div class="highlight-body">
+      <span class="highlight-category"></span>
+      <h3 class="highlight-title"></h3>
+      <p class="highlight-match"></p>
+    </div>
+  </article>
+</template>
+
+<script src="js/api.js"></script>
+<script src="js/lazyload.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
